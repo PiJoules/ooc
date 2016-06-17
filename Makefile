@@ -1,6 +1,6 @@
 .PHONY: all
 
-all: compile link
+all: compile link run
 
 
 INCLUDE_DIR = Include
@@ -21,10 +21,12 @@ EXE = App/main.c
 HEADERS = \
 	$(INCLUDE_DIR)/Set.h \
 	$(INCLUDE_DIR)/new.h \
-	$(INCLUDE_DIR)/Object.h
+	$(INCLUDE_DIR)/Object.h \
+	$(INCLUDE_DIR)/All.h
 
-OBJECTS = \
-	$(LIB_DIR)/BagSet.o
+OBJECTS = 
+	#$(LIB_DIR)/SetWithClass.o
+	#$(LIB_DIR)/BagSet.o
 	#$(LIB_DIR)/Set.o
 
 %.o: %.c
@@ -41,4 +43,10 @@ link: $(OBJECTS)
 
 debug: CFLAGS += -DDEBUG
 debug: all
+
+valgrind:
+	valgrind --leak-check=yes $(OUTPUT)
+
+run: $(OUTPUT)
+	./$(OUTPUT)
 
