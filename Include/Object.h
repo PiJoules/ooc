@@ -1,9 +1,39 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-extern const void* Object;
+/**
+ * Class implementation
+ */
+extern Object ObjectClass;
 
-// Checks if 2 items are not equal
-int differ(const void* a, const void* b);
+/**
+ * Constructors
+ */
+Any new_Object();
+
+/**
+ * Method implementations
+ */
+void Object_init_impl(Any self);
+void Object_del_impl(Any self);
+Any Object_str_impl(Any self);
+Any Object_copy_impl(Any self);
+int Object_equals_impl(Any self, Any other);
+Any Object_add_impl(Any self, Any other);
+
+/**
+ * Class layout
+ */
+struct Object {
+    ClassProperties properties;
+
+    // Object methods
+    void (*init)(Any self);
+    void (*del)(Any self);
+    Any (*str)(Any self);
+    Any (*copy)(Any self);
+    int (*equals)(Any self, Any other);
+    Any (*add)(Any self, Any other);
+};
 
 #endif

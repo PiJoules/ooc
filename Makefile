@@ -19,15 +19,16 @@ OUTPUT = main
 EXE = App/main.c
 
 HEADERS = \
-	$(INCLUDE_DIR)/Set.h \
-	$(INCLUDE_DIR)/new.h \
+	$(INCLUDE_DIR)/types.h \
 	$(INCLUDE_DIR)/Object.h \
-	$(INCLUDE_DIR)/All.h
+	$(INCLUDE_DIR)/String.h \
+	$(INCLUDE_DIR)/All.h \
+	$(INCLUDE_DIR)/functions.h
 
-OBJECTS = 
-	#$(LIB_DIR)/SetWithClass.o
-	#$(LIB_DIR)/BagSet.o
-	#$(LIB_DIR)/Set.o
+OBJECTS = \
+	$(LIB_DIR)/Object.o \
+	$(LIB_DIR)/String.o \
+	$(LIB_DIR)/functions.o
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $<
@@ -49,4 +50,7 @@ valgrind:
 
 run: $(OUTPUT)
 	./$(OUTPUT)
+
+test: EXE = App/test.c
+test: clean debug valgrind
 
