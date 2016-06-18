@@ -21,6 +21,7 @@ EXE = App/main.c
 HEADERS = \
 	$(INCLUDE_DIR)/types.h \
 	$(INCLUDE_DIR)/Object.h \
+	$(INCLUDE_DIR)/List.h \
 	$(INCLUDE_DIR)/String.h \
 	$(INCLUDE_DIR)/All.h \
 	$(INCLUDE_DIR)/functions.h
