@@ -48,6 +48,11 @@ void String_init_impl(Any self, char* init_str){
 
     size_t size = sizeof(char) * (strlen(init_str) + 1);
     SELF(String)->value = (char*)malloc(size);
+
+#ifdef DEBUG
+    assert(SELF(String)->value);
+#endif
+
     memcpy(SELF(String)->value, init_str, size);
 }
 

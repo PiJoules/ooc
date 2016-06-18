@@ -43,6 +43,11 @@ Any Object_str_impl(Any self){
 Any Object_copy_impl(Any self){
     Object* obj = SELF(Object);
     Object* obj_copy = (Object*)malloc(obj->properties.size);
+
+#ifdef DEBUG
+    assert(obj_copy);
+#endif
+
     memcpy(obj_copy, obj, obj->properties.size);
     return obj_copy;
 }
