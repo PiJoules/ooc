@@ -4,10 +4,10 @@
 /**
  * Free functions
  */
-Any new(Any);
+Any new(const Any);
 void destroy(Any);
 Any super(Any self);
-void print(Any);
-void println(Any);
+void print(const Any);
+void println(const Any);
 
 #endif

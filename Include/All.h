@@ -27,5 +27,10 @@
 #define TYPE(obj) CAST(ClassProperties, obj)->type
 #define SELF_TYPE TYPE(self)
 
+// Creating new instance
+#define NEW(cls) (cls*)new((Any)&cls ## Class)
+
+// Calling function
+#define CALL(cls, obj, method, ...) CAST(cls, obj)->method(obj, ##__VA_ARGS__)
 
 #endif

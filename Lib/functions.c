@@ -1,6 +1,6 @@
 #include "All.h"
 
-Any new(Any _cls){
+Any new(const Any _cls){
     Object* cls = (Object*)_cls;
     const size_t size = cls->properties.size;
     Any obj = (Any)malloc(size);
@@ -22,13 +22,13 @@ Any super(Any self){
     return ((ClassProperties*) self)->parent;
 }
 
-void print(Any _obj){
+void print(const Any _obj){
     Object* obj = (Object*) _obj;
     String* _str = obj->str(obj);
     printf("%s", _str->toCharArray(_str));
     destroy(_str);
 }
-void println(Any _obj){
+void println(const Any _obj){
     Object* obj = (Object*) _obj;
     String* _str = obj->str(obj);
     printf("%s\n", _str->toCharArray(_str));

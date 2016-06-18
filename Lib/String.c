@@ -3,11 +3,11 @@
 /**
  * Class implementation
  */
-String StringClass = {
+const String StringClass = {
     {
         sizeof(String),
-        &StringClass,
-        &ObjectClass,
+        (Any) &StringClass,
+        (Any) &ObjectClass,
     },
 
     // Object methods
@@ -30,7 +30,7 @@ String StringClass = {
  * Constructors
  */
 Any new_String(char* init_str){
-    String* obj = (String*)new(&StringClass);
+    String* obj = NEW(String);
     obj->init(obj, init_str);
     return obj;
 }

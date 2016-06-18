@@ -4,7 +4,7 @@
 /**
  * Class implementation
  */
-extern Object ObjectClass;
+extern const Object ObjectClass;
 
 /**
  * Constructors

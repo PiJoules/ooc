@@ -3,10 +3,10 @@
 /**
  * Class implementation
  */
-Object ObjectClass = {
+const Object ObjectClass = {
     {
         sizeof(Object),
-        &ObjectClass,
+        (Any) &ObjectClass,
         NULL,
     },
 
@@ -24,7 +24,7 @@ Object ObjectClass = {
  * Constructors
  */
 Any new_Object(){
-    Object* obj = (Object*)new(&ObjectClass);
+    Object* obj = NEW(Object);
     obj->init(obj);
     return obj;
 }

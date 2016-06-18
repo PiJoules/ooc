@@ -4,7 +4,7 @@
 /**
  * Class implementation
  */
-extern String StringClass;
+extern const String StringClass;
 
 /**
  * Constructors
@@ -27,7 +27,7 @@ char* String_toCharArray_impl(Any self);
  * Class layout
  */
 struct String {
-    ClassProperties properties;
+    const ClassProperties properties;
 
     // Object methods
     void (*init)(Any self, char* init_str);

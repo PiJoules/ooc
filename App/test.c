@@ -44,6 +44,7 @@ int main(int argc, char* argv[]){
     assert(!CAST(String, s1)->equals(s1, a));
     assert(CAST(String, s1)->equals(s1, s4));
     assert(CAST(String, s4)->equals(s4, s1));
+    assert(!CALL(Object, a, equals, s1));
 
     // Printing
     println(s);
