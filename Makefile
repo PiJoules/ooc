@@ -11,25 +11,25 @@ CC = gcc
 CSTANDARD = c99
 INCLUDES = -I$(INCLUDE_DIR)
 LIBS = -L$(LIB_DIR)
-override CFLAGS += -std=$(CSTANDARD) -Wall $(INCLUDES) $(LIBS)
+override CFLAGS += -std=$(CSTANDARD) -Wall -Werror $(INCLUDES) $(LIBS)
 
 # Final executable
 OUTPUT = main
 
 EXE = App/main.c
 
-HEADERS = \
-	$(INCLUDE_DIR)/types.h \
-	$(INCLUDE_DIR)/Object.h \
-	$(INCLUDE_DIR)/List.h \
-	$(INCLUDE_DIR)/String.h \
-	$(INCLUDE_DIR)/All.h \
-	$(INCLUDE_DIR)/functions.h
+HEADERS = #\
+	#$(INCLUDE_DIR)/types.h \
+	#$(INCLUDE_DIR)/Object.h \
+	#$(INCLUDE_DIR)/List.h \
+	#$(INCLUDE_DIR)/String.h \
+	#$(INCLUDE_DIR)/All.h \
+	#$(INCLUDE_DIR)/functions.h
 
-OBJECTS = \
-	$(LIB_DIR)/Object.o \
-	$(LIB_DIR)/String.o \
-	$(LIB_DIR)/functions.o
+OBJECTS = #\
+	#$(LIB_DIR)/Object.o \
+	#$(LIB_DIR)/String.o \
+	#$(LIB_DIR)/functions.o
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $<
