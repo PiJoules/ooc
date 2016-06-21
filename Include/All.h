@@ -15,23 +15,28 @@
 
 
 /**
- * Macros
+ * macros
  */
-// Call parent method
-#define SUPER(parent_class, method, ...) ((parent_class*)(super(self)))->method(self, ##__VA_ARGS__)
-
-// Typecasting shortcut
+// Casting to types
 #define CAST(cls, obj) ((cls*) obj)
 #define SELF(cls) CAST(cls, self)
 
-// Get type
-#define TYPE(obj) CAST(ClassProperties, obj)->type
-#define SELF_TYPE TYPE(self)
+// Calling functions
+#define CALL(return_type, arg_types, obj, method, ...) ((return_type (*)arg_types) obj->method)(obj, ##__VA_ARGS__)
+#define SELF_CALL(return_type, arg_types, cls, method, ...) CALL(return_type, arg_types, CAST(cls, self), method, ##__VA_ARGS__)
+#define SUPER_CALL(return_type, arg_types, cls, method, ...) ((return_type (*)arg_types) cls ## Class.method)(self, ##__VA_ARGS__)
 
-// Creating new instance
-#define NEW(cls) (cls*)new((Any)&cls ## Class)
+// Creating new instances
+#define CREATE(cls) \
+    const size_t obj_size = sizeof(cls); \
+    cls* obj = (cls*)malloc(obj_size); \
+    memcpy(obj, &cls ## Class, obj_size);
 
-// Calling function
-#define CALL(cls, obj, method, ...) CAST(cls, obj)->method(obj, ##__VA_ARGS__)
+// Calling constructors
+#define NEW(constructor, ...) new_ ## constructor(__VA_ARGS__)
+
+// Assign overrided methods
+#define APPLY_OVERRIDES(cls) cls ## _overrides(obj);
+
 
 #endif

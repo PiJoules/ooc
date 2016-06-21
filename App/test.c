@@ -5,60 +5,27 @@ int main(int argc, char* argv[]){
     printf("DEBUG flag set.\n");
 #endif
 
-    printf("offset: %zu\n", offsetof(Object, str));
+    Object* obj = NEW(Object);
+    destroy(obj);
 
     /**
-     * Object tests
+     * Strings
      */
-    Any a = new_Object();
-    Any a2 = new_Object();
+    Any str = NEW(EmptyString);
+    destroy(str);
 
-    // Addition
-    Any a3 = CAST(Object, a)->add(a, a2);
+    Any str2 = NEW(String, "something");
+    Any str3 = NEW(String, " else ");
 
-    // Equality
-    assert(CAST(Object, a)->equals(a, a2));
-    assert(CAST(Object, a2)->equals(a2, a3));
-    assert(CAST(Object, a3)->equals(a3, a));
+    // String add
+    Any str4 = ADD(str2, str3);
+    
+    // print
+    println(str4);
 
-    // Printing
-    print(a);
-    print(a3);
-
-    // Destruction
-    destroy(a3);
-    destroy(a2);
-
-    /**
-     * String tests
-     */
-    Any s = new_String("printing works.");
-
-    // Addition
-    Any s1 = new_String("First");
-    Any s2 = new_String("Second");
-    Any s3 = CAST(String, s1)->add(s1, s2);
-
-    // Copy
-    Any s4 = CAST(String, s1)->copy(s1);
-
-    // Equality
-    assert(!CAST(String, s1)->equals(s1, a));
-    assert(CAST(String, s1)->equals(s1, s4));
-    assert(CAST(String, s4)->equals(s4, s1));
-    assert(!CALL(Object, a, equals, s1));
-
-    // Printing
-    println(s);
-    println(s3);
-
-    // Destruction
-    destroy(s4);
-    destroy(s3);
-    destroy(s2);
-    destroy(s1);
-    destroy(s);
-    destroy(a);
+    destroy(str2);
+    destroy(str4);
+    destroy(str3);
 
     return 0;
 }

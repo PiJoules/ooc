@@ -1,98 +1,66 @@
 #include "All.h"
 
-/**
- * Class implementation
- */
-const String StringClass = {
-    {
-        sizeof(String),
-        (Any) &StringClass,
-        (Any) &ObjectClass,
-    },
+// Initialize string class
+String StringClass = { STRING_IMPLS };
 
-    // Object methods
-    String_init_impl,
-    String_del_impl,
-    String_str_impl,
-    String_copy_impl,
-    String_equals_impl,
-    String_add_impl,
+// Apply method overrides
+static void String_overrides(String* self){
+    self->init = String_init_impl;
+    self->del = String_del_impl;
+    self->str = String_str_impl;
+    self->add = String_add_impl;
+}
 
-    // String methods
-    String_toCharArray_impl,
-
-    // String properties
-    "",
-};
-
-
-/**
- * Constructors
- */
-Any new_String(char* init_str){
-    String* obj = NEW(String);
-    obj->init(obj, init_str);
+// Constructors
+String* new_String(char* value){
+    CREATE(String);
+    APPLY_OVERRIDES(String);
+    CALL(void, (Any, char*), obj, init, value);
     return obj;
 }
 
-Any new_EmptyString(){
+String* new_EmptyString(){
     return new_String("");
 }
 
 
-/**
- * Method implementations
- */
-void String_init_impl(Any self, char* init_str){
-    SUPER(Object, init);
+// Implementations
+void String_init_impl(Any self, char* value){
+    SUPER_CALL(void, (Any), Object, init);
 
-    size_t size = sizeof(char) * (strlen(init_str) + 1);
-    SELF(String)->value = (char*)malloc(size);
-
-#ifdef DEBUG
-    assert(SELF(String)->value);
-#endif
-
-    memcpy(SELF(String)->value, init_str, size);
+    String* self_str = (String*) self;
+    const size_t str_size = sizeof(char) * strlen(value);
+    self_str->value = (char*)malloc(str_size + 1);
+    copyStrInplace(self_str->value, value, str_size);
 }
 
 void String_del_impl(Any self){
-    SUPER(Object, del);
     free(SELF(String)->value);
 }
 
-Any String_str_impl(Any self){
-    return SELF(String)->copy(self);
-}
-
-Any String_copy_impl(Any self){
+String* String_str_impl(Any self){
     return new_String(SELF(String)->value);
 }
 
-Any String_add_impl(Any self, Any other){
-    String* s = SELF(String);
-    String* o = CAST(String, other);
+char* String_toCharArray_impl(Any self){
+    return SELF(String)->value;
+}
 
-    size_t self_size = strlen(s->value);
-    size_t other_size = strlen(o->value);
+Any String_add_impl(Any self, Any other){
+    String* self_str = SELF(String);
+    String* other_str = CAST(String, other);
+    const size_t self_size = sizeof(char) * strlen(self_str->value);
+    const size_t other_size = sizeof(char) * strlen(other_str->value);
     char* result = (char*)malloc(self_size + other_size + 1);
 
 #ifdef DEBUG
     assert(result);
 #endif
 
-    strncpy(result, s->value, self_size);
-
-    /**
-     * Valgrind returns:
-     * "Conditional jump or move depends on uninitialised value(s)"
-     * if the result does not have a null terminator at the end of the inistal string.
-     *
-     * This error is not thrown (or necessary) by gcc, but valgrind doesn't like it.
-     */
+    strncpy(result, self_str->value, self_size);
     result[self_size] = '\0';
 
-    strncat(result, o->value, other_size);
+    strncat(result, other_str->value, other_size);
     result[self_size + other_size] = '\0';
 
     Any result_obj = new_String(result);
@@ -100,24 +68,4 @@ Any String_add_impl(Any self, Any other){
     return result_obj;
 }
 
-int String_equals_impl(Any self, Any other){
-    if (SELF_TYPE != TYPE(other)){
-        return 0;
-    }
 
-    String* s = SELF(String);
-    String* o = CAST(String, other);
-
-    size_t self_size = strlen(s->value);
-    size_t other_size = strlen(o->value);
-
-    if (self_size != other_size){
-        return 0;
-    }
-
-    return !strncmp(s->value, o->value, self_size);
-}
-
-char* String_toCharArray_impl(Any self){
-    return SELF(String)->value;
-}
