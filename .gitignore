@@ -1,4 +1,5 @@
 main
+tmp/
 
 # Object files
 *.o

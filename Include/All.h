@@ -6,6 +6,7 @@
 #include <stdarg.h>
 #include <assert.h>
 #include <string.h>
+#include <stddef.h>
 
 #include "types.h"
 #include "Object.h"

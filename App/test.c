@@ -5,6 +5,8 @@ int main(int argc, char* argv[]){
     printf("DEBUG flag set.\n");
 #endif
 
+    printf("offset: %zu\n", offsetof(Object, str));
+
     /**
      * Object tests
      */
