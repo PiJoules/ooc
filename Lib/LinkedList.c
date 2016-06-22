@@ -100,9 +100,30 @@ void LinkedList_append_impl(Any self, Any obj){
     list->length++;
 }
 
+static void remove_node(LinkedList* list, Node* current){
+    Node* prevNode = current->prev;
+    Node* nextNode = current->next;
+    if (prevNode){
+        prevNode->next = nextNode;
+    }
+    if (nextNode){
+        nextNode->prev = prevNode;
+    }
+
+    if (current == list->first){
+        list->first = nextNode;
+    }
+    if (current == list->last){
+        list->last = prevNode;
+    }
+
+    free(current);
+
+    list->length--;
+}
+
 void LinkedList_remove_impl(Any self, Any obj){
     LinkedList* list = SELF(LinkedList);
-    //void *result = NULL;
 
 #ifdef DEBUG
     assert(list->first && list->last);
@@ -113,25 +134,7 @@ void LinkedList_remove_impl(Any self, Any obj){
     for (Node* current = list->first; current != NULL; current = current->next){
         Any value = current->value;
         if (EQUALS(value, obj)){
-            Node* prevNode = current->prev;
-            Node* nextNode = current->next;
-            if (prevNode){
-                prevNode->next = nextNode;
-            }
-            if (nextNode){
-                nextNode->prev = prevNode;
-            }
-
-            if (current == list->first){
-                list->first = nextNode;
-            }
-            if (current == list->last){
-                list->last = prevNode;
-            }
-
-            free(current);
-
-            list->length--;
+            remove_node(list, current);
             return;
         }
     }
@@ -140,7 +143,24 @@ void LinkedList_remove_impl(Any self, Any obj){
     exit(1);
 }
 
-void LinkedList_removeAt_impl(Any self, int i){}
+void LinkedList_removeAt_impl(Any self, int to_remove){
+    LinkedList* list = SELF(LinkedList);
+
+#ifdef DEBUG
+    // For now, make sure i not negative, but will implement negative indexing in future
+    assert(to_remove >= 0);
+    assert(to_remove < list->length);
+    assert(list->first && list->last);
+    assert(list->length > 0);
+#endif
+
+    // Move the current node to the indx to remove
+    Node* current = list->first;
+    for (size_t i = 0; i < to_remove; i++){
+        current = current->next;
+    }
+    remove_node(list, current);
+}
 
 Any LinkedList_slice_impl(Any self, int start, int end){
     return new_LinkedList();

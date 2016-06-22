@@ -49,17 +49,44 @@ int main(int argc, char* argv[]){
      * List
      */
     Any lst = NEW(LinkedList);
+
+    // Append
     APPEND(lst, obj);
     APPEND(lst, obj);
     APPEND(lst, str4);
     APPEND(lst, lst);
     assert(LEN(lst) == 4);
+
+    // Remove
     REMOVE(lst, obj);
     assert(LEN(lst) == 3);
     REMOVE(lst, obj);
     assert(LEN(lst) == 2);
     assert(EQUALS(CAST(LinkedList, lst)->first->value, str4));
     assert(EQUALS(CAST(LinkedList, lst)->last->value, lst));
+    REMOVE(lst, str4);
+    REMOVE(lst, lst);
+    assert(LEN(lst) == 0);
+    assert(!CAST(LinkedList, lst)->first);
+    assert(!CAST(LinkedList, lst)->last);
+
+    // Remove at
+    APPEND(lst, obj);
+    APPEND(lst, obj);
+    APPEND(lst, str4);
+    APPEND(lst, lst);
+
+    REMOVE_AT(lst, 1);
+    assert(LEN(lst) == 3);
+    REMOVE_AT(lst, 0);
+    assert(LEN(lst) == 2);
+    assert(EQUALS(CAST(LinkedList, lst)->first->value, str4));
+    assert(EQUALS(CAST(LinkedList, lst)->last->value, lst));
+    REMOVE_AT(lst, 1);
+    REMOVE_AT(lst, 0);
+    assert(LEN(lst) == 0);
+    assert(!CAST(LinkedList, lst)->first);
+    assert(!CAST(LinkedList, lst)->last);
 
     destroy(str2);
     destroy(str4);
