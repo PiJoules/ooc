@@ -12,6 +12,7 @@
 #include "Object.h"
 #include "String.h"
 #include "List.h"
+#include "LinkedList.h"
 #include "functions.h"
 
 

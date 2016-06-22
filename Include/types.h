@@ -11,6 +11,7 @@ typedef void* Class;
 typedef struct Object Object;
 typedef struct String String;
 typedef struct List List;
+typedef struct LinkedList LinkedList;
 
 #define CLASS_PROPERTIES \
     Class cls;
