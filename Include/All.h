@@ -44,4 +44,21 @@
 #define CLASS(obj) CAST(ClassProperties, obj)->cls
 
 
+/**
+ * Maximum function call check
+ */
+#ifndef MAX_NESTED_FUNCTION_CALLS
+#define MAX_NESTED_FUNCTION_CALLS 100
+#endif
+
+#define INC_CALLS(counter) \
+    counter++; \
+    assert(counter <= MAX_NESTED_FUNCTION_CALLS);
+
+#define DEC_CALLS(counter) \
+    assert(counter > 0); \
+    assert(counter <= MAX_NESTED_FUNCTION_CALLS); \
+    counter--;
+
+
 #endif

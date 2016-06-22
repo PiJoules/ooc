@@ -88,6 +88,27 @@ int main(int argc, char* argv[]){
     assert(!CAST(LinkedList, lst)->first);
     assert(!CAST(LinkedList, lst)->last);
 
+    // Slice
+    APPEND(lst, obj);
+    APPEND(lst, obj);
+    APPEND(lst, str4);
+    APPEND(lst, lst);
+
+    Any lst2 = SLICE(lst, 2, 4);
+    assert(LEN(lst2) == 2);
+    assert(EQUALS(CAST(LinkedList, lst2)->first->value, str4));
+    assert(EQUALS(CAST(LinkedList, lst2)->last->value, lst));
+    Any lst3 = NEW(LinkedList);
+    APPEND(lst3, str4);
+    APPEND(lst3, lst);
+    assert(EQUALS(lst3, lst2));
+    assert(EQUALS(lst3, lst3));
+    assert(EQUALS(lst2, lst3));
+    assert(!EQUALS(lst3, lst));
+    assert(!EQUALS(lst, lst2));
+    destroy(lst2);
+    destroy(lst3);
+
     destroy(str2);
     destroy(str4);
     destroy(lst);

@@ -1,5 +1,8 @@
 #include "All.h"
 
+// For preventing infinite recursion
+static size_t calls = 0;
+
 
 // Initialize string class
 LinkedList LinkedListClass = {
@@ -57,9 +60,33 @@ Any LinkedList_add_impl(Any self, Any other){
 }
 
 int LinkedList_equals_impl(Any self, Any other){
+    INC_CALLS(calls);
+
     if (CLASS(self) != CLASS(other)){
+        DEC_CALLS(calls);
         return 0;
     }
+
+    LinkedList* s = SELF(LinkedList);
+    LinkedList* o = CAST(LinkedList, other);
+
+    if (LEN(self) != LEN(other)){
+        DEC_CALLS(calls);
+        return 0;
+    }
+
+    Node* n1 = s->first;
+    Node* n2 = o->first;
+    for (size_t i = 0; i < LEN(self); i++){
+        if (!(n1->value == n2->value || EQUALS(n1->value, n2->value))){
+            DEC_CALLS(calls);
+            return 0;
+        }
+        n1 = n1->next;
+        n2 = n2->next;
+    }
+
+    DEC_CALLS(calls);
     return 1;
 }
 
@@ -163,7 +190,27 @@ void LinkedList_removeAt_impl(Any self, int to_remove){
 }
 
 Any LinkedList_slice_impl(Any self, int start, int end){
-    return new_LinkedList();
+    LinkedList* list = SELF(LinkedList);
+
+#ifdef DEBUG
+    assert(start >= 0);
+    assert(end >= start);
+    assert(end <= list->length);
+    assert(list->first && list->last);
+    assert(list->length > 0);
+#endif
+
+    LinkedList* new_list = new_LinkedList();
+    Node* current = list->first;
+    for (size_t i = 0; i < start && current; i++){
+        current = current->next;
+    }
+    for (size_t i = start; i < end && current; i++){
+        APPEND(new_list, current->value);
+        current = current->next;
+    }
+
+    return new_list;
 }
 
 size_t LinkedList_len_impl(Any self){
