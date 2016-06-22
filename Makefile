@@ -49,7 +49,7 @@ debug: CFLAGS += -DDEBUG
 debug: all
 
 valgrind:
-	valgrind --leak-check=yes $(OUTPUT)
+	valgrind --leak-check=yes ./$(OUTPUT)
 
 run: $(OUTPUT)
 	./$(OUTPUT)
