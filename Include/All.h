@@ -11,6 +11,7 @@
 #include "types.h"
 #include "Object.h"
 #include "String.h"
+#include "List.h"
 #include "functions.h"
 
 
@@ -37,6 +38,9 @@
 
 // Assign overrided methods
 #define APPLY_OVERRIDES(cls) cls ## _overrides(obj);
+
+// Get class
+#define CLASS(obj) CAST(ClassProperties, obj)->cls
 
 
 #endif

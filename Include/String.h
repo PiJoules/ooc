@@ -25,6 +25,8 @@ void String_del_impl(Any self);
 String* String_str_impl(Any self);
 char* String_toCharArray_impl(Any self);
 Any String_add_impl(Any self, Any other);
+int String_equals_impl(Any self, Any other);
+Any String_copy_impl(Any self);
 
 // Initialize string class
 String StringClass;

@@ -1,7 +1,10 @@
 #include "All.h"
 
 // Initialize string class
-String StringClass = { STRING_IMPLS };
+String StringClass = {
+    &StringClass,
+    STRING_IMPLS
+};
 
 // Apply method overrides
 static void String_overrides(String* self){
@@ -9,6 +12,8 @@ static void String_overrides(String* self){
     self->del = String_del_impl;
     self->str = String_str_impl;
     self->add = String_add_impl;
+    self->equals = String_equals_impl;
+    self->copy = String_copy_impl;
 }
 
 // Constructors
@@ -31,6 +36,11 @@ void String_init_impl(Any self, char* value){
     String* self_str = (String*) self;
     const size_t str_size = sizeof(char) * strlen(value);
     self_str->value = (char*)malloc(str_size + 1);
+
+#ifdef DEBUG
+    assert(self_str->value);
+#endif
+
     copyStrInplace(self_str->value, value, str_size);
 }
 
@@ -66,6 +76,28 @@ Any String_add_impl(Any self, Any other){
     Any result_obj = new_String(result);
     free(result);
     return result_obj;
+}
+
+int String_equals_impl(Any self, Any other){
+    if (CLASS(self) != CLASS(other)){
+        return 0;
+    }
+
+    String* s = SELF(String);
+    String* o = CAST(String, other);
+
+    const size_t self_size = strlen(s->value);
+    const size_t other_size = strlen(o->value);
+
+    if (self_size != other_size){
+        return 0;
+    }
+
+    return !strncmp(s->value, o->value, self_size);
+}
+
+Any String_copy_impl(Any self){
+    return new_String(SELF(String)->value);
 }
 
 

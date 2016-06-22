@@ -1,7 +1,10 @@
 #include "All.h"
 
 // Initialize the object class
-Object ObjectClass = { OBJECT_IMPLS };
+Object ObjectClass = {
+    &ObjectClass,
+    OBJECT_IMPLS
+};
 
 // Constructors
 Object* new_Object(){
@@ -22,6 +25,15 @@ String* Object_str_impl(Any self){
 }
 
 Any Object_add_impl(Any self, Any other){
+    return new_Object();
+}
+
+int Object_equals_impl(Any self, Any other){
+    return CLASS(self) == CLASS(other);
+}
+
+// Deep copy
+Any Object_copy_impl(Any self){
     return new_Object();
 }
 

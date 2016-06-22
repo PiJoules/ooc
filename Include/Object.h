@@ -4,10 +4,13 @@
 
 // Object members
 #define OBJECT_MEMBERS \
+    CLASS_PROPERTIES \
     Method init; \
     Method del; \
     Method str; \
-    Method add;
+    Method add; \
+    Method equals; \
+    Method copy;
 
 
 // Object implementations
@@ -15,7 +18,9 @@
     Object_init_impl, \
     Object_del_impl, \
     Object_str_impl, \
-    Object_add_impl,
+    Object_add_impl, \
+    Object_equals_impl, \
+    Object_copy_impl,
 
 // Constructors
 Object* new_Object();
@@ -30,7 +35,14 @@ String* Object_str_impl(Any self);
 Any Object_add_impl(Any self, Any other);
 #define ADD(obj, other) CALL(Any, (Any, Any), CAST(Object, obj), add, other)
 
+int Object_equals_impl(Any self, Any other);
+#define EQUALS(obj, other) CALL(int, (Any, Any), CAST(Object, obj), equals, other)
 
+Any Object_copy_impl(Any self);
+#define COPY(obj) CALL(Any, (Any), CAST(Object, obj), copy)
+
+
+// Initialize object layout
 Object ObjectClass;
 struct Object { OBJECT_MEMBERS };
 

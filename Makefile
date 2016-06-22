@@ -23,13 +23,14 @@ HEADERS = \
 	$(INCLUDE_DIR)/types.h \
 	$(INCLUDE_DIR)/functions.h \
 	$(INCLUDE_DIR)/Object.h \
-	$(INCLUDE_DIR)/String.h
-	#$(INCLUDE_DIR)/List.h \
+	$(INCLUDE_DIR)/String.h \
+	$(INCLUDE_DIR)/List.h
 
 OBJECTS = \
 	$(LIB_DIR)/functions.o \
 	$(LIB_DIR)/Object.o \
-	$(LIB_DIR)/String.o
+	$(LIB_DIR)/String.o \
+	$(LIB_DIR)/LinkedList.o
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $<
