@@ -1,10 +1,13 @@
 #include "All.h"
 
 // Initialize the object class
+static int Initialized_ObjectClass = 0;
+static void Initialize_ObjectClass(){}
 Object ObjectClass = {
     &ObjectClass,
     OBJECT_IMPLS
 };
+
 
 // Constructors
 Object* new_Object(){

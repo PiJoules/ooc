@@ -8,7 +8,9 @@
     Method remove; \
     Method removeAt; \
     Method slice; \
-    Method len;
+    Method len; \
+    Method get; \
+    Method clear;
 
 
 // List implementations
@@ -21,6 +23,8 @@
 #define REMOVE_AT(lst, i) CALL(void, (Any, int), CAST(List, lst), removeAt, i)
 #define SLICE(lst, start, end) CALL(Any, (Any, int, int), CAST(List, lst), slice, start, end)
 #define LEN(lst) CALL(size_t, (Any), CAST(List, lst), len)
+#define GET(lst, i) CALL(Any, (Any, int i), CAST(List, lst), get, i)
+#define CLEAR(lst) CALL(void, (Any), CAST(List, lst), clear)
 
 // Initialize string class
 struct List { LIST_MEMBERS };

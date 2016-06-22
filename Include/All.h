@@ -30,9 +30,26 @@
 
 // Creating new instances
 #define CREATE(cls) \
+    if (!Initialized_ ## cls ## Class){ \
+        Initialize_ ## cls ## Class(); \
+    } \
     const size_t obj_size = sizeof(cls); \
     cls* obj = (cls*)malloc(obj_size); \
     memcpy(obj, &cls ## Class, obj_size);
+
+// Instantiating a class
+#define INITIALIZE_CLASS(cls, impls) \
+    static int Initialized_ ## cls ## Class = 0; \
+    cls cls ## Class = { \
+        &cls ## Class, \
+        impls \
+    }; \
+    static void cls ## _overrides(cls* self); \
+    static void Initialize_ ## cls ## Class(){ \
+        cls ## _overrides(&cls ## Class); \
+        Initialized_ ## cls ## Class = 1; \
+    }
+
 
 // Calling constructors
 #define NEW(constructor, ...) new_ ## constructor(__VA_ARGS__)
@@ -51,11 +68,14 @@
 #define MAX_NESTED_FUNCTION_CALLS 100
 #endif
 
-#define INC_CALLS(counter) \
+#define TRACK_FUNCTION_CALLS() \
+    static size_t counter = 0;
+
+#define INC_CALLS() \
     counter++; \
     assert(counter <= MAX_NESTED_FUNCTION_CALLS);
 
-#define DEC_CALLS(counter) \
+#define DEC_CALLS() \
     assert(counter > 0); \
     assert(counter <= MAX_NESTED_FUNCTION_CALLS); \
     counter--;

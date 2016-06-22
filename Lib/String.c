@@ -1,10 +1,7 @@
 #include "All.h"
 
 // Initialize string class
-String StringClass = {
-    &StringClass,
-    STRING_IMPLS
-};
+INITIALIZE_CLASS(String, STRING_IMPLS)
 
 // Apply method overrides
 static void String_overrides(String* self){
@@ -16,10 +13,10 @@ static void String_overrides(String* self){
     self->copy = String_copy_impl;
 }
 
+
 // Constructors
 String* new_String(char* value){
     CREATE(String);
-    APPLY_OVERRIDES(String);
     CALL(void, (Any, char*), obj, init, value);
     return obj;
 }

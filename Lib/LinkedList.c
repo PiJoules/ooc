@@ -1,14 +1,9 @@
 #include "All.h"
 
-// For preventing infinite recursion
-static size_t calls = 0;
-
+TRACK_FUNCTION_CALLS()
 
 // Initialize string class
-LinkedList LinkedListClass = {
-    &LinkedListClass,
-    LINKED_LIST_IMPLS
-};
+INITIALIZE_CLASS(LinkedList, LINKED_LIST_IMPLS)
 
 // Apply method overrides
 static void LinkedList_overrides(LinkedList* self){
@@ -21,12 +16,9 @@ static void LinkedList_overrides(LinkedList* self){
 }
 
 
-
-
 // Constructors
 LinkedList* new_LinkedList(){
     CREATE(LinkedList);
-    APPLY_OVERRIDES(LinkedList);
     CALL(void, (Any), obj, init);
     return obj;
 }
@@ -40,7 +32,7 @@ void LinkedList_init_impl(Any self){
 void LinkedList_del_impl(Any self){
     LinkedList* lst = SELF(LinkedList);
     
-    for (Node* current = lst->first; current != NULL; current = current->next){
+    for (Node* current = lst->first; current; current = current->next){
         if (current->prev){
             // Do not destory the value.
             // The programmer is in charge of that.
@@ -52,7 +44,7 @@ void LinkedList_del_impl(Any self){
 }
 
 String* LinkedList_str_impl(Any self){
-    return new_EmptyString();
+    return new_String("temporary str impl");
 }
 
 Any LinkedList_add_impl(Any self, Any other){
@@ -60,10 +52,10 @@ Any LinkedList_add_impl(Any self, Any other){
 }
 
 int LinkedList_equals_impl(Any self, Any other){
-    INC_CALLS(calls);
+    INC_CALLS();
 
     if (CLASS(self) != CLASS(other)){
-        DEC_CALLS(calls);
+        DEC_CALLS();
         return 0;
     }
 
@@ -71,7 +63,7 @@ int LinkedList_equals_impl(Any self, Any other){
     LinkedList* o = CAST(LinkedList, other);
 
     if (LEN(self) != LEN(other)){
-        DEC_CALLS(calls);
+        DEC_CALLS();
         return 0;
     }
 
@@ -79,14 +71,14 @@ int LinkedList_equals_impl(Any self, Any other){
     Node* n2 = o->first;
     for (size_t i = 0; i < LEN(self); i++){
         if (!(n1->value == n2->value || EQUALS(n1->value, n2->value))){
-            DEC_CALLS(calls);
+            DEC_CALLS();
             return 0;
         }
         n1 = n1->next;
         n2 = n2->next;
     }
 
-    DEC_CALLS(calls);
+    DEC_CALLS();
     return 1;
 }
 
@@ -171,22 +163,7 @@ void LinkedList_remove_impl(Any self, Any obj){
 }
 
 void LinkedList_removeAt_impl(Any self, int to_remove){
-    LinkedList* list = SELF(LinkedList);
-
-#ifdef DEBUG
-    // For now, make sure i not negative, but will implement negative indexing in future
-    assert(to_remove >= 0);
-    assert(to_remove < list->length);
-    assert(list->first && list->last);
-    assert(list->length > 0);
-#endif
-
-    // Move the current node to the indx to remove
-    Node* current = list->first;
-    for (size_t i = 0; i < to_remove; i++){
-        current = current->next;
-    }
-    remove_node(list, current);
+    remove_node(SELF(LinkedList), GET(self, to_remove));
 }
 
 Any LinkedList_slice_impl(Any self, int start, int end){
@@ -215,4 +192,27 @@ Any LinkedList_slice_impl(Any self, int start, int end){
 
 size_t LinkedList_len_impl(Any self){
     return SELF(LinkedList)->length;
+}
+
+Any LinkedList_get_impl(Any self, int to_get){
+    LinkedList* list = SELF(LinkedList);
+
+#ifdef DEBUG
+    // For now, make sure i not negative, but will implement negative indexing in future
+    assert(to_get >= 0);
+    assert(to_get < list->length);
+    assert(list->first && list->last);
+    assert(list->length > 0);
+#endif
+
+    // Move the current node to the indx to remove
+    Node* current = list->first;
+    for (size_t i = 0; i < to_get; i++){
+        current = current->next;
+    }
+    return current;
+}
+
+void LinkedList_clear_impl(Any self){
+
 }

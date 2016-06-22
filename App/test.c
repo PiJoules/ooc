@@ -109,6 +109,18 @@ int main(int argc, char* argv[]){
     destroy(lst2);
     destroy(lst3);
 
+    // ITERATE
+    APPEND(lst, obj);
+    APPEND(lst, obj);
+    APPEND(lst, str4);
+    APPEND(lst, lst);
+
+    ITERATE(lst, obj_iter){
+        println(obj_iter);
+    }
+
+    // ENUMERATE
+
     destroy(str2);
     destroy(str4);
     destroy(lst);
